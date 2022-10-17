@@ -1,6 +1,6 @@
 import '/pub/chai.js';
 import '/pub/mocha.js';
-import { FetchReqI, list_names, ResultObligtryI, testUtil } from './test_util.js';
+import { FetchReqI, list_names, FetchResultI, testUtil } from './test_util.js';
 
 
 const assert = chai.assert;
@@ -16,7 +16,7 @@ async function main(): Promise<void> {
   // Init.
   //////////////////////////////////////////////////////////////////////////////
   let fetchReq: FetchReqI
-  let fetchResult: ResultObligtryI<unknown>
+  let fetchResult: FetchResultI<unknown>
   // const url = 'http://localhost:8080'
   const url = 'https://maildif-task-postgr-cruduser.herokuapp.com'
   //

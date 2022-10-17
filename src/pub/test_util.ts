@@ -53,20 +53,16 @@ export const list_names = [
 ////////////////////////////////////////////////////////////////////////////////
 // Utilities.
 ////////////////////////////////////////////////////////////////////////////////
-export interface ErrorResultI {
+export type FetchResultI<R> = {
+  ok: true
+  result: R
+} | {
   ok: false
   error: any
 }
 
-export type ResultObligtryI<R> = {
-  ok: true
-  result: R
-} | ErrorResultI
-
 export const testUtil = Object.freeze({
-  isResultObligtryType(unknown: unknown): unknown is ResultObligtryI<unknown> {
-    if (typeof unknown !== 'object') return false
-    if (unknown === null) return false
+  isFetchResult(unknown: unknown): unknown is FetchResultI<unknown> {
     if (!testUtil.isObjectWithStringSignature(unknown)) return false
     const ok = unknown['ok']
     if (typeof ok !== 'boolean') return false
@@ -76,28 +72,15 @@ export const testUtil = Object.freeze({
     return true
   },
 
-  isObjectWithStringSignature(unknown: object): unknown is Record<string, unknown> {
-    for (const key in unknown) {
-      if (typeof key !== 'string') return false
-    }
+  isObjectWithStringSignature(unknown: unknown): unknown is Record<string, unknown> {
+    if (typeof unknown !== 'object') return false
+    if (!unknown) return false
     return true
-  },
-
-  arrayOfObjectsWithOptionalSignature<Obj extends Record<string, any>>(
-    unknownInput: unknown
-  ): (Partial<Obj>)[] {
-    let output: (Partial<Obj>)[]
-    output = (
-      Array.isArray(unknownInput)
-      && unknownInput.length > 0
-      && unknownInput.every((val) => (typeof val === 'object' && val !== null))
-    ) ? unknownInput as (Partial<Obj>)[] : [{}]
-    return output
   },
 
   async sendFetchRequest(
     fetchReq: FetchReqI
-  ): Promise<ResultObligtryI<unknown>> {
+  ): Promise<FetchResultI<unknown>> {
     const { reqTxt, method, headers, bodyObj, descrip }: FetchReqI = fetchReq
 
     let init: RequestInit | undefined
@@ -120,7 +103,7 @@ export const testUtil = Object.freeze({
     if (headers !== undefined) console.log('Headers:\n', headers)
     console.log('Result:\n', result)
 
-    if (!testUtil.isResultObligtryType(result)) return {ok: false, error: 'Incorrect return type.'}
+    if (!testUtil.isFetchResult(result)) return {ok: false, error: 'Incorrect return type.'}
 
     return result
   },
