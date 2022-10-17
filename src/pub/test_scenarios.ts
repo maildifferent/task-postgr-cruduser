@@ -1,7 +1,6 @@
-
-import { FetchReqI, list_names, ResultObligtryI, testUtil } from './test_util.js';
 import '/pub/chai.js';
 import '/pub/mocha.js';
+import { FetchReqI, list_names, ResultObligtryI, testUtil } from './test_util.js';
 
 
 const assert = chai.assert;
@@ -49,32 +48,29 @@ async function main(): Promise<void> {
     // {"token": "eyJhbGciOiJIUzI1NiI...","expire": "2022-09-26T12:38:31.873Z"}
     fetchResult = await testUtil.sendFetchRequest(fetchReq)
     // Tests.
-    {
-      let result: any
-      if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
-      describe(testUtil.genDescripTxt(fetchReq, fetchResult), () => {
-        it('typeof result === object && result !== null', () => {
-          assert.strictEqual(typeof result, 'object')
-          assert.notStrictEqual(result, null)
-        })
-        //  
-        it('Object.keys(result).length === 2', () => {
-          assert.strictEqual(Object.keys(result).length, 2)
-        })
-        //
-        it('typeof result.token === string', () => {
-          assert.strictEqual(typeof result.token, 'string')
-        })
-        //
-        it('typeof result.expire === string', () => {
-          assert.strictEqual(typeof result.expire, 'string')
-        })
+    let result: any
+    if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
+    describe(testUtil.genDescripTxt(fetchReq, fetchResult), () => {
+      it('typeof result === object && result !== null', () => {
+        assert.strictEqual(typeof result, 'object')
+        assert.notStrictEqual(result, null)
       })
-    }
-    // Typed return.
-    let result: Partial<{ token: string, expire: string }> = {}
-    if (fetchResult.ok) result = fetchResult.result || {}
-    return result
+      //  
+      it('Object.keys(result).length === 2', () => {
+        assert.strictEqual(Object.keys(result).length, 2)
+      })
+      //
+      it('typeof result.token === string', () => {
+        assert.strictEqual(typeof result.token, 'string')
+      })
+      //
+      it('typeof result.expire === string', () => {
+        assert.strictEqual(typeof result.expire, 'string')
+      })
+    })
+    // Return.
+    if (!result) result = {}
+    return result as Partial<{ token: string, expire: string }>
   })()
   testSigninResult
 
@@ -109,29 +105,24 @@ async function main(): Promise<void> {
     // [{"uid": "a91f8fa8-...", "email": "example21@exe.com", "nickname": "nickname21"}]
     fetchResult = await testUtil.sendFetchRequest(fetchReq)
     // Tests.
-    {
-      let result: any
-      if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
-      describe(testUtil.genDescripTxt(fetchReq, result), () => {
-        it('Array.isArray(result) === true', () => {
-          assert.strictEqual(Array.isArray(result), true)
-        })
-        //  
-        it('result.length === 2', () => {
-          assert.strictEqual(result.length, 2)
-        })
-        //
-        it('result.every((user) => Object.keys(user).length === 3)', () => {
-          assert.strictEqual(result.every((user: any) => Object.keys(user).length === 3), true)
-        })
+    let result: any
+    if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
+    describe(testUtil.genDescripTxt(fetchReq, result), () => {
+      it('Array.isArray(result) === true', () => {
+        assert.strictEqual(Array.isArray(result), true)
       })
-    }
-    // Typed return.
-    let result: Partial<{ uid: string, email: string, nickname: string }>[] = [{}]
-    if (fetchResult.ok) result = testUtil.arrayOfObjectsWithOptionalSignature<
-      { uid: string, email: string, nickname: string }
-    >(fetchResult.result)
-    return result
+      //  
+      it('result.length === 2', () => {
+        assert.strictEqual(result.length, 2)
+      })
+      //
+      it('result.every((user) => Object.keys(user).length === 3)', () => {
+        assert.strictEqual(result.every((user: any) => Object.keys(user).length === 3), true)
+      })
+    })
+    // Return.
+    if (!result) result = [{}]
+    return result as Partial<{ uid: string, email: string, nickname: string }>[]
   })()
   testCreateUsersResult
 
@@ -156,46 +147,41 @@ async function main(): Promise<void> {
     // [{"uid": "a91f8fa8-...", "email": "example21@exe.com", "nickname": "nickname21"}]
     fetchResult = await testUtil.sendFetchRequest(fetchReq)
     // Tests.
-    {
-      let result: any
-      if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
-      describe(testUtil.genDescripTxt(fetchReq, fetchResult), () => {
-        let user0: Partial<{ uid: string, email: string, nickname: string }> = {}
-        if (Array.isArray(result) && result.length > 0) {
-          user0 = result[0]
-        }
-        //
-        it('Array.isArray(result) === true', () => {
-          assert.strictEqual(Array.isArray(result), true)
-        })
-        //
-        it('result.length === 1', () => {
-          assert.strictEqual(result.length, 1)
-        })
-        //
-        it('Object.keys(user0).length === 3', () => {
-          assert.strictEqual(Object.keys(user0).length, 3)
-        })
-        //
-        it('typeof user0.uid === string', () => {
-          assert.strictEqual(typeof user0.uid, 'string')
-        })
-        //
-        it('user0.email === ' + email.toLowerCase(), () => {
-          assert.strictEqual(user0.email, email.toLowerCase())
-        })
-        //
-        it('user0.nickname = ' + nick, () => {
-          assert.strictEqual(user0.nickname, nick)
-        })
+    let result: any
+    if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
+    describe(testUtil.genDescripTxt(fetchReq, fetchResult), () => {
+      let user0: Partial<{ uid: string, email: string, nickname: string }> = {}
+      if (Array.isArray(result) && result.length > 0) {
+        user0 = result[0]
+      }
+      //
+      it('Array.isArray(result) === true', () => {
+        assert.strictEqual(Array.isArray(result), true)
       })
-    }
-    // Typed return.
-    let result: Partial<{ uid: string, email: string, nickname: string }>[] = [{}]
-    if (fetchResult.ok) result = testUtil.arrayOfObjectsWithOptionalSignature<
-      { uid: string, email: string, nickname: string }
-    >(fetchResult.result)
-    return result
+      //
+      it('result.length === 1', () => {
+        assert.strictEqual(result.length, 1)
+      })
+      //
+      it('Object.keys(user0).length === 3', () => {
+        assert.strictEqual(Object.keys(user0).length, 3)
+      })
+      //
+      it('typeof user0.uid === string', () => {
+        assert.strictEqual(typeof user0.uid, 'string')
+      })
+      //
+      it('user0.email === ' + email.toLowerCase(), () => {
+        assert.strictEqual(user0.email, email.toLowerCase())
+      })
+      //
+      it('user0.nickname = ' + nick, () => {
+        assert.strictEqual(user0.nickname, nick)
+      })
+    })
+    // Return.
+    if (!result) result = [{}]
+    return result as Partial<{ uid: string, email: string, nickname: string }>[]
   })()
   testReadUserByParamResult
 
@@ -229,29 +215,24 @@ async function main(): Promise<void> {
     // [{"uid": "a91f8fa8-...", "email": "example21@exe.com", "nickname": "nickname21"}]
     fetchResult = await testUtil.sendFetchRequest(fetchReq)
     // Tests.
-    {
-      let result: any
-      if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
-      describe(testUtil.genDescripTxt(fetchReq, result), () => {
-        it('Array.isArray(result) === true', () => {
-          assert.strictEqual(Array.isArray(result), true)
-        })
-        //  
-        it('result.length === 3', () => {
-          assert.strictEqual(result.length, 3)
-        })
-        //
-        it('result.every((user) => Object.keys(user).length === 3)', () => {
-          assert.strictEqual(result.every((user: any) => Object.keys(user).length === 3), true)
-        })
+    let result: any
+    if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
+    describe(testUtil.genDescripTxt(fetchReq, result), () => {
+      it('Array.isArray(result) === true', () => {
+        assert.strictEqual(Array.isArray(result), true)
       })
-    }
-    // Typed return.
-    let result: Partial<{ uid: string, email: string, nickname: string }>[] = [{}]
-    if (fetchResult.ok) result = testUtil.arrayOfObjectsWithOptionalSignature<
-      { uid: string, email: string, nickname: string }
-    >(fetchResult.result)
-    return result
+      //  
+      it('result.length === 3', () => {
+        assert.strictEqual(result.length, 3)
+      })
+      //
+      it('result.every((user) => Object.keys(user).length === 3)', () => {
+        assert.strictEqual(result.every((user: any) => Object.keys(user).length === 3), true)
+      })
+    })
+    // Return.
+    if (!result) result = [{}]
+    return result as Partial<{ uid: string, email: string, nickname: string }>[]
   })()
   testDeleteUsersResult
 
