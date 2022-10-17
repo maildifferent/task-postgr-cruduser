@@ -1,29 +1,16 @@
 import express from 'express'
 import { driverFront } from "../driver_front.js"
 import { authorization } from '../authorization.js'
-import { ErrorCustomSyntax, ErrorCustomType } from '../error.js'
+import { ErrorCustomType } from '../error.js'
 
 
 ////////////////////////////////////////////////////////////////////////////////
 // Main.
 ////////////////////////////////////////////////////////////////////////////////
-export const driverFrontAuthorizationController: {
-  authProtect: express.RequestHandler,
+export const authorizationController: {
   signin: express.RequestHandler,
   login: express.RequestHandler
 } = ({
-  async authProtect(req, res, next) {
-    try {
-      const token = getTokenFromRequest(req)
-      const verifyTokenRes = await authorization.verifyTokenAsync(token)
-      if ('auth' in req) throw new ErrorCustomSyntax('auth in req')
-      req.auth = verifyTokenRes
-      return next()
-    } catch (error) {
-      return driverFront.responseErr(res, 401, error)
-    }
-  },
-
   async signin(req, res) {
     try {
       let unknown: unknown = driverFront.getLinkDataFromReq(req)
@@ -52,7 +39,7 @@ export const driverFrontAuthorizationController: {
 ////////////////////////////////////////////////////////////////////////////////
 // Private util.
 ////////////////////////////////////////////////////////////////////////////////
-function getTokenFromRequest(req: express.Request): string {
+export function getTokenFromRequest(req: express.Request): string {
   if (!req || !req.headers || !req.headers.authorization) throw new ErrorCustomType('!req || !req.headers || !req.headers.authorization')
   if (!req.headers.authorization.startsWith('Bearer ')) throw new ErrorCustomType('!req.headers.authorization.startsWith(Bearer )')
 
