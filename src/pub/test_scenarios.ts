@@ -18,8 +18,8 @@ async function main(): Promise<void> {
   //////////////////////////////////////////////////////////////////////////////
   let fetchRequest: FetchRequestI
   let fetchResult: FetchResultI<unknown>
-  const url = 'http://localhost:8080'
-  // const url = 'https://maildif-task-postgr-cruduser.herokuapp.com'
+  // const url = 'http://localhost:8080'
+  const url = 'https://maildif-task-postgr-cruduser.herokuapp.com'
   //
   testUtil.shuffleArray(list_names)
 
