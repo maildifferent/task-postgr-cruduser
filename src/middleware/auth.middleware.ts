@@ -8,7 +8,7 @@ import { getTokenFromRequest } from '../controller/auth.controller.js';
 ////////////////////////////////////////////////////////////////////////////////
 // Main.
 ////////////////////////////////////////////////////////////////////////////////
-export const authorizationMiddleware: {
+export const authMiddleware: {
   authProtect: express.RequestHandler
 } = ({
   async authProtect(req, res, next) {
