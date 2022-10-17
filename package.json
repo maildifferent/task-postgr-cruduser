@@ -1,6 +1,6 @@
 {
   "type": "module",
-  "name": "task-tag-crud",
+  "name": "task-postgr-cruduser",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",

@@ -18,6 +18,8 @@ async function main(): Promise<void> {
   //////////////////////////////////////////////////////////////////////////////
   let fetchReq: FetchReqI
   let fetchResult: ResultObligtryI<unknown>
+  // const url = 'http://localhost:8080'
+  const url = 'https://maildif-task-postgr-cruduser.herokuapp.com'
   //
   testUtil.shuffleArray(list_names)
 
@@ -38,7 +40,7 @@ async function main(): Promise<void> {
   //
   const testSigninResult = await (async () => {
     fetchReq = {
-      reqTxt: 'http://localhost:8080/api/signin',
+      reqTxt: url + '/api/signin',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       bodyObj: testSigninBody,
@@ -95,7 +97,7 @@ async function main(): Promise<void> {
   //
   const testCreateUsersResult = await (async () => {
     fetchReq = {
-      reqTxt: 'http://localhost:8080/api/user',
+      reqTxt: url + '/api/user',
       method: 'POST',
       headers: {
         'Authorization': 'Bearer ' + testSigninResult.token,
@@ -144,8 +146,8 @@ async function main(): Promise<void> {
       nick = testCreateUsersResult[0]?.nickname || ''
     }
     fetchReq = {
-      reqTxt: 'http://localhost:8080/api/user/' + email,
-      // reqTxt: 'http://localhost:8080/api/user?email=dax437@exe.com',
+      reqTxt: url + '/api/user/' + email,
+      // reqTxt: url + '/api/user?email=dax437@exe.com',
       headers: {
         'Authorization': 'Bearer ' + testSigninResult.token
       },
@@ -215,7 +217,7 @@ async function main(): Promise<void> {
   //
   const testDeleteUsersResult = await (async () => {
     fetchReq = {
-      reqTxt: 'http://localhost:8080/api/user',
+      reqTxt: url + '/api/user',
       method: 'DELETE',
       headers: {
         'Authorization': 'Bearer ' + testSigninResult.token,

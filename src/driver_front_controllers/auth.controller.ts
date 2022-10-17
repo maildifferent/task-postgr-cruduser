@@ -13,7 +13,6 @@ export const driverFrontAuthorizationController: {
   login: express.RequestHandler
 } = ({
   async authProtect(req, res, next) {
-    const retF = (status: number, error: any) => { return driverFront.responseErr(res, status, error) }
     try {
       const token = getTokenFromRequest(req)
       const verifyTokenRes = await authorization.verifyTokenAsync(token)
@@ -21,33 +20,31 @@ export const driverFrontAuthorizationController: {
       req.auth = verifyTokenRes
       return next()
     } catch (error) {
-      return retF(401, error)
+      return driverFront.responseErr(res, 401, error)
     }
   },
 
   async signin(req, res) {
-    const retF = (status: number, error: any) => { return driverFront.responseErr(res, status, error) }
     try {
       let unknown: unknown = driverFront.getLinkDataFromReq(req)
       if (!unknown) unknown = req.body[driverFront.CONSTS.data]
       const loginRes = await authorization.signinUntyped(unknown)
-      return res.json({ ok: true, result: loginRes })
+      return driverFront.response(res, loginRes)
     } catch (error) {
-      return retF(500, error)
+      return driverFront.responseErr(res, 500, error)
     }
   },
 
   async login(req, res) {
-    const retF = (status: number, error: any) => { return driverFront.responseErr(res, status, error) }
     try {
       let unknown: unknown = driverFront.getLinkDataFromReq(req)
       if (!unknown) unknown = req.body[driverFront.CONSTS.data]
       if (typeof unknown !== 'object') throw new ErrorCustomType('typeof unknown !== object')
       const { password, ...user } = { password: undefined, ...unknown }
       const loginRes = await authorization.loginUntyped(user, password)
-      return res.json({ ok: true, result: loginRes })
+      return driverFront.response(res, loginRes)
     } catch (error) {
-      return retF(401, error)
+      return driverFront.responseErr(res, 401, error)
     }
   }
 } as const)

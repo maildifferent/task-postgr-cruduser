@@ -11,6 +11,14 @@ const PORT = config.port || 8080
 const app = express()
 
 app.use(express.json())
+
+app.options('*', function (req, res) {
+  res.header('Access-Control-Allow-Origin', '*')
+  res.header('Access-Control-Allow-Credentials', 'true')
+  res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
+  res.header('Access-Control-Allow-Headers', 'Content-Type')
+})
+
 app.use('/api', driverFrontAuthRouter)
 app.use('/api', driverFrontUserRouter)
 

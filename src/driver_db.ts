@@ -1,5 +1,6 @@
 import pg from 'pg'
 import { AuthorizationT } from './authorization.js'
+import { config } from './config.js'
 import { DocSchemaValTypesT, docSchemaUtil } from './doc_schema.js'
 import { domainUtil, DomainSchemaT } from './domain.js'
 import { ErrorCustomAuthorization, ErrorCustomType, ErrorCustomSyntax } from './error.js'
@@ -8,12 +9,19 @@ import { ProjectionOptionsT } from './projection.js'
 import { isKeyOfObject } from './util.js'
 
 
-const pgPool = new pg.Pool({
+const pgPool = config.isProduction 
+? new pg.Pool({
+  connectionString: process.env['DATABASE_URL'],
+  ssl: {
+    rejectUnauthorized: false
+  }
+})
+: new pg.Pool({
   user: 'postgres',
   password: '12345678',
   host: 'localhost',
   port: 5432,
-  database: 'task_tag_crud'
+  database: 'task_cruduser'
 })
 
 interface DriverDbOptions {
