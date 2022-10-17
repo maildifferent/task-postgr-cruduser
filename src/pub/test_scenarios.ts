@@ -1,6 +1,7 @@
+
+import { FetchRequestI, list_names, FetchResultI, testUtil } from './test_util.js';
 import '/pub/chai.js';
 import '/pub/mocha.js';
-import { FetchReqI, list_names, FetchResultI, testUtil } from './test_util.js';
 
 
 const assert = chai.assert;
@@ -15,10 +16,10 @@ async function main(): Promise<void> {
   //////////////////////////////////////////////////////////////////////////////
   // Init.
   //////////////////////////////////////////////////////////////////////////////
-  let fetchReq: FetchReqI
+  let fetchRequest: FetchRequestI
   let fetchResult: FetchResultI<unknown>
-  // const url = 'http://localhost:8080'
-  const url = 'https://maildif-task-postgr-cruduser.herokuapp.com'
+  const url = 'http://localhost:8080'
+  // const url = 'https://maildif-task-postgr-cruduser.herokuapp.com'
   //
   testUtil.shuffleArray(list_names)
 
@@ -38,7 +39,7 @@ async function main(): Promise<void> {
   })()
   //
   const testSigninResult = await (async () => {
-    fetchReq = {
+    fetchRequest = {
       reqTxt: url + '/api/signin',
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -46,11 +47,11 @@ async function main(): Promise<void> {
       descrip: '<< SIGNIN >>'
     }
     // {"token": "eyJhbGciOiJIUzI1NiI...","expire": "2022-09-26T12:38:31.873Z"}
-    fetchResult = await testUtil.sendFetchRequest(fetchReq)
+    fetchResult = await testUtil.sendFetchRequest(fetchRequest)
     // Tests.
     let result: any
     if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
-    describe(testUtil.genDescripTxt(fetchReq, fetchResult), () => {
+    describe(testUtil.genDescripTxt(fetchRequest, fetchResult), () => {
       it('typeof result === object && result !== null', () => {
         assert.strictEqual(typeof result, 'object')
         assert.notStrictEqual(result, null)
@@ -92,7 +93,7 @@ async function main(): Promise<void> {
   })()
   //
   const testCreateUsersResult = await (async () => {
-    fetchReq = {
+    fetchRequest = {
       reqTxt: url + '/api/user',
       method: 'POST',
       headers: {
@@ -103,11 +104,11 @@ async function main(): Promise<void> {
       descrip: '<< CREATE 2 USERS >>'
     }
     // [{"uid": "a91f8fa8-...", "email": "example21@exe.com", "nickname": "nickname21"}]
-    fetchResult = await testUtil.sendFetchRequest(fetchReq)
+    fetchResult = await testUtil.sendFetchRequest(fetchRequest)
     // Tests.
     let result: any
     if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
-    describe(testUtil.genDescripTxt(fetchReq, result), () => {
+    describe(testUtil.genDescripTxt(fetchRequest, result), () => {
       it('Array.isArray(result) === true', () => {
         assert.strictEqual(Array.isArray(result), true)
       })
@@ -136,7 +137,7 @@ async function main(): Promise<void> {
       email = testCreateUsersResult[0]?.email || ''
       nick = testCreateUsersResult[0]?.nickname || ''
     }
-    fetchReq = {
+    fetchRequest = {
       reqTxt: url + '/api/user/' + email,
       // reqTxt: url + '/api/user?email=dax437@exe.com',
       headers: {
@@ -145,11 +146,11 @@ async function main(): Promise<void> {
       descrip: '<< READ USER BY PARAM >>'
     }
     // [{"uid": "a91f8fa8-...", "email": "example21@exe.com", "nickname": "nickname21"}]
-    fetchResult = await testUtil.sendFetchRequest(fetchReq)
+    fetchResult = await testUtil.sendFetchRequest(fetchRequest)
     // Tests.
     let result: any
     if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
-    describe(testUtil.genDescripTxt(fetchReq, fetchResult), () => {
+    describe(testUtil.genDescripTxt(fetchRequest, fetchResult), () => {
       let user0: Partial<{ uid: string, email: string, nickname: string }> = {}
       if (Array.isArray(result) && result.length > 0) {
         user0 = result[0]
@@ -202,7 +203,7 @@ async function main(): Promise<void> {
   })()
   //
   const testDeleteUsersResult = await (async () => {
-    fetchReq = {
+    fetchRequest = {
       reqTxt: url + '/api/user',
       method: 'DELETE',
       headers: {
@@ -213,11 +214,11 @@ async function main(): Promise<void> {
       descrip: '<< DELETE ALL CREATED USERS >>'
     }
     // [{"uid": "a91f8fa8-...", "email": "example21@exe.com", "nickname": "nickname21"}]
-    fetchResult = await testUtil.sendFetchRequest(fetchReq)
+    fetchResult = await testUtil.sendFetchRequest(fetchRequest)
     // Tests.
     let result: any
     if (!fetchResult.ok) { result = undefined } else { result = fetchResult.result }
-    describe(testUtil.genDescripTxt(fetchReq, result), () => {
+    describe(testUtil.genDescripTxt(fetchRequest, result), () => {
       it('Array.isArray(result) === true', () => {
         assert.strictEqual(Array.isArray(result), true)
       })

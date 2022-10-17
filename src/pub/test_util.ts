@@ -1,17 +1,4 @@
-////////////////////////////////////////////////////////////////////////////////
-// Interfaces.
-////////////////////////////////////////////////////////////////////////////////
-export interface FetchReqI {
-  reqTxt: string
-  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
-  headers?: HeadersInit
-  bodyObj?: object
-  descrip?: string
-}
 
-////////////////////////////////////////////////////////////////////////////////
-// Constants.
-////////////////////////////////////////////////////////////////////////////////
 export const list_names = [
   'Ace',
   'Ali',
@@ -50,9 +37,14 @@ export const list_names = [
   'Zev',
 ];
 
-////////////////////////////////////////////////////////////////////////////////
-// Utilities.
-////////////////////////////////////////////////////////////////////////////////
+export interface FetchRequestI {
+  reqTxt: string
+  method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
+  headers?: HeadersInit
+  bodyObj?: object
+  descrip?: string
+}
+
 export type FetchResultI<R> = {
   ok: true
   result: R
@@ -61,6 +53,9 @@ export type FetchResultI<R> = {
   error: any
 }
 
+////////////////////////////////////////////////////////////////////////////////
+// Main.
+////////////////////////////////////////////////////////////////////////////////
 export const testUtil = Object.freeze({
   isFetchResult(unknown: unknown): unknown is FetchResultI<unknown> {
     if (!testUtil.isObjectWithStringSignature(unknown)) return false
@@ -79,9 +74,9 @@ export const testUtil = Object.freeze({
   },
 
   async sendFetchRequest(
-    fetchReq: FetchReqI
+    fetchReq: FetchRequestI
   ): Promise<FetchResultI<unknown>> {
-    const { reqTxt, method, headers, bodyObj, descrip }: FetchReqI = fetchReq
+    const { reqTxt, method, headers, bodyObj, descrip }: FetchRequestI = fetchReq
 
     let init: RequestInit | undefined
     if (method || bodyObj || headers) {
@@ -95,7 +90,7 @@ export const testUtil = Object.freeze({
     let result: unknown
     if (response.ok) { result = await response.json() }
 
-    const ftechReqForTxt: FetchReqI = { reqTxt }
+    const ftechReqForTxt: FetchRequestI = { reqTxt }
     if (method) ftechReqForTxt.method = method
     if (descrip) ftechReqForTxt.descrip = descrip
     console.log(testUtil.genDescripTxt(ftechReqForTxt))
@@ -108,8 +103,8 @@ export const testUtil = Object.freeze({
     return result
   },
 
-  genDescripTxt(fetchReq: FetchReqI, res?: any): string {
-    let { reqTxt, method, headers, bodyObj, descrip }: FetchReqI = fetchReq
+  genDescripTxt(fetchReq: FetchRequestI, res?: any): string {
+    let { reqTxt, method, headers, bodyObj, descrip }: FetchRequestI = fetchReq
     if (!method) method = 'GET'
 
     let text: string = ''
