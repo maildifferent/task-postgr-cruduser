@@ -2,7 +2,7 @@ import express from 'express';
 import { driverFront } from "../driver_front.js";
 import { authorization } from '../authorization.js';
 import { ErrorCustomSyntax } from '../error.js';
-import { getTokenFromRequest } from '../controller/auth.controller';
+import { getTokenFromRequest } from '../controller/auth.controller.js';
 
 
 ////////////////////////////////////////////////////////////////////////////////

@@ -3,8 +3,8 @@ console.clear()
 import express from 'express'
 import path from 'path'
 import { config } from './config.js';
-import { driverFrontAuthRouter } from './route/auth.route.js';
-import { driverFrontUserRouter } from './route/user.route.js';
+import { authRouter } from './route/auth.route.js';
+import { userRouter } from './route/user.route.js';
 
 
 const PORT = config.port || 8080
@@ -19,8 +19,8 @@ app.options('*', function (req, res) {
   res.header('Access-Control-Allow-Headers', 'Content-Type')
 })
 
-app.use('/api', driverFrontAuthRouter)
-app.use('/api', driverFrontUserRouter)
+app.use('/api', authRouter)
+app.use('/api', userRouter)
 
 app.get('/', (req, res) => { res.json({ message: 'Server works message...' }) })
 app.use('/pub', express.static(path.resolve() + '/pub'))

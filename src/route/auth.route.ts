@@ -1,8 +1,8 @@
 import express from 'express'
-import { authorizationController } from '../controller/auth.controller.js'
+import { authController } from '../controller/auth.controller.js'
 
 
-export const driverFrontAuthRouter = express.Router()
+export const authRouter = express.Router()
 
-driverFrontAuthRouter.post('/signin', authorizationController.signin)
-driverFrontAuthRouter.post('/login', authorizationController.login)
+authRouter.post('/signin', authController.signin)
+authRouter.post('/login', authController.login)
