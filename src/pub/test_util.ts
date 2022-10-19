@@ -90,10 +90,11 @@ export const testUtil = Object.freeze({
     let result: unknown
     if (response.ok) { result = await response.json() }
 
-    const ftechReqForTxt: FetchRequestI = { reqTxt }
-    if (method) ftechReqForTxt.method = method
-    if (descrip) ftechReqForTxt.descrip = descrip
-    console.log(testUtil.genDescripTxt(ftechReqForTxt))
+    const fetchReqObjToGenDescription: FetchRequestI = { reqTxt }
+    if (method) fetchReqObjToGenDescription.method = method
+    if (descrip) fetchReqObjToGenDescription.descrip = descrip
+    console.log(testUtil.genDescripTxt(fetchReqObjToGenDescription))
+
     if (bodyObj !== undefined) console.log('Body:\n', bodyObj)
     if (headers !== undefined) console.log('Headers:\n', headers)
     console.log('Result:\n', result)
